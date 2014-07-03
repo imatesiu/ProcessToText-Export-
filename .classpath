@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="lib/RealPro-2.2/lib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 7 [1.7.0_60]"/>
+	<classpathentry kind="lib" path="lib/batik-1.7/batik.jar"/>
+	<classpathentry kind="lib" path="lib/RealPro-2.2/lib/rpw-lkb.jar"/>
+	<classpathentry kind="lib" path="lib/RealPro-2.2/lib/rpw.jar"/>
+	<classpathentry kind="lib" path="lib/RealPro-2.2/lib/xalan.jar"/>
+	<classpathentry kind="lib" path="lib/RealPro-2.2/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/RealPro-2.2/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/RiTaWN/ritaWN/rwn24-src.jar"/>
+	<classpathentry kind="lib" path="lib/jwnl14-rc2/jwnl.jar"/>
+	<classpathentry kind="lib" path="lib/args4j-2.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/bpstruct.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/gson-1.7.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/gson-1.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.1.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.1.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/itext-xtra-5.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.1.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.1.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/itextpdf-5.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/json_simple-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/json-lib-2.2.2-jdk15.jar"/>
+	<classpathentry kind="lib" path="lib/labels.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.jar"/>
+	<classpathentry kind="lib" path="lib/PDFBox-0.7.3.jar"/>
+	<classpathentry kind="lib" path="lib/utils.jar"/>
+	<classpathentry kind="lib" path="lib/jbpt-0.2.397.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Users/isiu/Downloads/stanford-postagger-2014-06-16/stanford-postagger.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="/ProM/lib/OpenXES.jar"/>
+	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Models.jar"/>
+	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Contexts.jar"/>
+	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Framework.jar"/>
+	<classpathentry kind="lib" path="/PNetReplayer/stdlib/jgraph.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

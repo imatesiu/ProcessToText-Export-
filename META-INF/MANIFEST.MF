@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./ junit.jar log4j-1.2.15.jar pnapi-java.jar stixar-g
+ raphlib-988-beta.jar uma-1.2.4.jar stixar-util-950-beta.jar jgrapht-j
+ dk1.6.jar antlr-runtime-3.2.jar org.json.jar jbpt-0.2.77.jar args4j-2
+ .0.6.jar jdom.jar rpst2.jar
+Class-Path: .
+Created-By: 1.6.0_26 (Apple Inc.)
+Rsrc-Main-Class: ee.ut.bpstruct2.cmd.BPStructCMD
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
+
