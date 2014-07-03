@@ -10,19 +10,24 @@ import org.processmining.models.graphbased.directed.bpmn.elements.Swimlane;
 
 public class BpmnSequenceFlow extends BpmnFlow {
 	
+	String conditionExpression;
+	
 	public BpmnSequenceFlow(String tag) {
 		super(tag);
 	}
 	
 	public Flow unmarshall(BPMNDiagram diagram, Map<String, BPMNNode> id2node, Swimlane lane) {
-		return diagram.addFlow(id2node.get(sourceRef), id2node.get(targetRef), lane, name);
+		Flow flow = diagram.addFlow(id2node.get(sourceRef), id2node.get(targetRef), name);
+		flow.setConditionExpression(conditionExpression);
+		return flow;
 	}
 
 	public Flow unmarshall(BPMNDiagram diagram, Collection<String> elements,
 			Map<String, BPMNNode> id2node, Swimlane lane) {
 		if (elements.contains(sourceRef) && elements.contains(targetRef)) {
-			Flow flow = diagram.addFlow(id2node.get(sourceRef), id2node.get(targetRef), lane, name);
+			Flow flow = diagram.addFlow(id2node.get(sourceRef), id2node.get(targetRef), name);
 			flow.getAttributeMap().put("Original id", id);
+			flow.setConditionExpression(conditionExpression);
 			return flow;
 		}
 		return null;
@@ -30,5 +35,14 @@ public class BpmnSequenceFlow extends BpmnFlow {
 	
 	public void marshall(Flow flow) {
 		super.marshall(flow);
+		conditionExpression = flow.getConditionExpression();
+	}
+	
+	public void setConditionExpression(String conditionExpression) {
+		this.conditionExpression = conditionExpression;
+	}
+	
+	public String getConditionExpression() {
+		return conditionExpression;
 	}
 }

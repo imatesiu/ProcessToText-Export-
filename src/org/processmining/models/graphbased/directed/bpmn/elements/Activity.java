@@ -29,6 +29,7 @@ public class Activity extends BPMNNode implements Decorated {
 	protected final static int stdWidth = 80;
 	protected final static int stdHeight = 40;
 	private IGraphElementDecoration decorator = null;
+	private int numOfBoundaryEvents = 0;
 
 	public Activity(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, boolean bLooped, boolean bAdhoc, boolean bCompensation, boolean bMultiinstance,
@@ -237,5 +238,13 @@ public class Activity extends BPMNNode implements Decorated {
 			label.validate();
 			label.paint(g2d.create(labelX, labelY, labelW, labelH));
 		}
+	}
+	
+	public int getNumOfBoundaryEvents() {
+		return numOfBoundaryEvents;
+	}
+	
+	public void incNumOfBoundaryEvents() {
+		numOfBoundaryEvents++;
 	}
 }

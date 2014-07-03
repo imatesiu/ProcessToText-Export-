@@ -20,7 +20,19 @@ import org.processmining.models.shapes.Decorated;
 public class SubProcess extends Activity implements Decorated,ContainingDirectedGraphNode {
 
 	private final Set<ContainableDirectedGraphElement> children;
+	
+	private boolean triggeredByEvent = false;
 
+	/**
+	 * Create a subprocess without parent
+	 * @param bpmndiagram
+	 * @param label
+	 * @param looped
+	 * @param adhoc
+	 * @param compensation
+	 * @param multiinstance
+	 * @param collapsed
+	 */
 	public SubProcess(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance, boolean collapsed) {
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed);
@@ -28,6 +40,17 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 		fillAttributes();
 	}
 
+	/**
+	 * Create a subprocess with parent subprocess
+	 * @param bpmndiagram
+	 * @param label
+	 * @param looped
+	 * @param adhoc
+	 * @param compensation
+	 * @param multiinstance
+	 * @param collapsed
+	 * @param parentSubProcess
+	 */
 	public SubProcess(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance,
 			boolean collapsed, SubProcess parentSubProcess) {
@@ -36,6 +59,17 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 		fillAttributes();
 	}
 
+	/**
+	 * Create a subprocess with parent swimlane
+	 * @param bpmndiagram
+	 * @param label
+	 * @param looped
+	 * @param adhoc
+	 * @param compensation
+	 * @param multiinstance
+	 * @param collapsed
+	 * @param parentSwimlane
+	 */
 	public SubProcess(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance,
 			boolean collapsed, Swimlane parentSwimlane) {
@@ -43,11 +77,76 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 		children = new HashSet<ContainableDirectedGraphElement>();
 		fillAttributes();
 	}
+	
+	/**
+	 * Create a subprocess without parent and with triggeredByEvent param
+	 * @param bpmndiagram
+	 * @param label
+	 * @param looped
+	 * @param adhoc
+	 * @param compensation
+	 * @param multiinstance
+	 * @param collapsed
+	 * @param triggeredByEvent
+	 */
+	public SubProcess(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
+			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance, boolean collapsed,
+			boolean triggeredByEvent) {
+		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed);
+		children = new HashSet<ContainableDirectedGraphElement>();
+		this.triggeredByEvent = triggeredByEvent;
+		fillAttributes();
+	}
+
+	/**
+	 * Create a subprocess with parent subprocess and with triggeredByEvent param
+	 * @param bpmndiagram
+	 * @param label
+	 * @param looped
+	 * @param adhoc
+	 * @param compensation
+	 * @param multiinstance
+	 * @param collapsed
+	 * @param triggeredByEvent
+	 * @param parentSubProcess
+	 */
+	public SubProcess(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
+			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance,
+			boolean collapsed, boolean triggeredByEvent, SubProcess parentSubProcess) {
+		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed, parentSubProcess);
+		children = new HashSet<ContainableDirectedGraphElement>();
+		this.triggeredByEvent = triggeredByEvent;
+		fillAttributes();
+	}
+
+	/**
+	 * Create a subprocess with parent swimlane and with triggeredByEvent param
+	 * @param bpmndiagram
+	 * @param label
+	 * @param looped
+	 * @param adhoc
+	 * @param compensation
+	 * @param multiinstance
+	 * @param collapsed
+	 * @param triggeredByEvent
+	 * @param parentSwimlane
+	 */
+	public SubProcess(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
+			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance,
+			boolean collapsed, boolean triggeredByEvent, Swimlane parentSwimlane) {
+		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed, parentSwimlane);
+		children = new HashSet<ContainableDirectedGraphElement>();
+		this.triggeredByEvent = triggeredByEvent;
+		fillAttributes();
+	}
 
 	/**
 	 * 
 	 */
 	private void fillAttributes() {
+		if(triggeredByEvent) {
+			getAttributeMap().put(AttributeMap.DASHPATTERN, new float[] { (float)3.0, (float)10.0 });
+		}
 		getAttributeMap().put(AttributeMap.SIZE, null);
 		getAttributeMap().put(AttributeMap.RESIZABLE, true);
 		getAttributeMap().put(AttributeMap.FILLCOLOR, new Color(.95F, .95F, .95F, .95F));
@@ -65,6 +164,10 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 
 	public Dimension getCollapsedSize() {
 		return new Dimension(stdWidth, stdHeight);
+	}
+	
+	public boolean getTriggeredByEvent() {
+		return triggeredByEvent;
 	}
 	
 	@Override

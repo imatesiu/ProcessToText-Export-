@@ -34,6 +34,9 @@ public class Swimlane extends BPMNNode implements Decorated, ContainingDirectedG
 	private final Set<ContainableDirectedGraphElement> children;
 	private SwimlaneType type;
 	
+	// A reference to a resource
+	private String partitionElement;
+	
 	public Swimlane(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, Swimlane parentSwimlane) {
 		super(bpmndiagram, parentSwimlane);
@@ -62,6 +65,9 @@ public class Swimlane extends BPMNNode implements Decorated, ContainingDirectedG
 
 	public void addChild(ContainableDirectedGraphElement child) {
 		children.add(child);
+		if(child instanceof Swimlane) {
+			getAttributeMap().put(AttributeMap.PREF_ORIENTATION, SwingConstants.NORTH);
+		}
 	}
 
 	public Dimension getCollapsedSize() {
@@ -91,7 +97,14 @@ public class Swimlane extends BPMNNode implements Decorated, ContainingDirectedG
 		label.paint(g2d.create(labelX, labelY, labelW, labelH));
 
 	}
-
+	
+	public void setPartitionElement(String partitionElement) {
+		this.partitionElement = partitionElement;
+	}
+	
+	public String getPartitionElement() {
+		return partitionElement;
+	}
 }
 
 

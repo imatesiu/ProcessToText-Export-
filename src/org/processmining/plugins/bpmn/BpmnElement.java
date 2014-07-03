@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.xmlpull.v1.XmlPullParser;
 
-import edu.stanford.nlp.io.EncodingPrintWriter.out;
-
 public class BpmnElement {
 
 	public BpmnText BpmnText;
@@ -36,7 +34,6 @@ public class BpmnElement {
 	 */
 	public void importElement(XmlPullParser xpp, Bpmn bpmn) {
 		lineNumber = xpp.getLineNumber();
-		
 		/*
 		 * Import all attributes of this element.
 		 */
@@ -58,10 +55,8 @@ public class BpmnElement {
 			/*
 			 * Get next event.
 			 */
-			
 			try {
 				int eventType = xpp.next();
-				out.println(xpp.getName());
 				if (eventType == XmlPullParser.END_DOCUMENT) {
 					/*
 					 * End of document. Should not happen.
@@ -156,19 +151,19 @@ public class BpmnElement {
 				/*
 				 * Child elements, use separated start and end tags.
 				 */
-				s += ">\n\t" + t + "\n</" + tag + ">\n";
+				s += ">\n" + t + "</" + tag + ">\n";
 			}
 		} else {
 			if (t.equals("")) {
 				/*
 				 * No child elements, use combined start-end tag.
 				 */
-				s += ">\n\t" + getBpmnText().getText() + "\n</" + tag + ">\n";
+				s += ">" + getBpmnText().getText() + "</" + tag + ">\n";
 			} else {
 				/*
 				 * Child elements, use separated start and end tags.
 				 */
-				s += ">\n\t" + getBpmnText().getText() + t + "\n</" + tag + ">\n";
+				s += ">" + getBpmnText().getText() + t + "</" + tag + ">\n";
 			}
 		}
 
@@ -237,7 +232,10 @@ public class BpmnElement {
 	 * @return
 	 */
 	protected String exportAttribute(String tag, String value) {
-		return " " + tag + "=\"" + value + "\"";
+		return " " + tag + "=\"" 
+					+ value.replace("&","&amp;").replace("\"", "&quot;").replace(">", "&gt;")
+						.replace("<", "&lt;")
+					+ "\"";
 	}
 
 	/**

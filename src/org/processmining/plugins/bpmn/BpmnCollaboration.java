@@ -13,12 +13,16 @@ public class BpmnCollaboration extends BpmnId {
 
 	private Collection<BpmnParticipant> participants;
 	private Collection<BpmnMessageFlow> messageFlows;
+	private Collection<BpmnTextAnnotation> textAnnotations;
+	private Collection<BpmnAssociation> associations;
 	
 	public BpmnCollaboration(String tag) {
 		super(tag);
 		
 		participants = new HashSet<BpmnParticipant>();
 		messageFlows = new HashSet<BpmnMessageFlow>();
+		textAnnotations = new HashSet<BpmnTextAnnotation>();
+		associations = new HashSet<BpmnAssociation>();		
 	}
 	
 	protected boolean importElements(XmlPullParser xpp, Bpmn bpmn) {
@@ -38,6 +42,16 @@ public class BpmnCollaboration extends BpmnId {
 			messageFlow.importElement(xpp, bpmn);
 			messageFlows.add(messageFlow);
 			return true;
+		} else if (xpp.getName().equals("textAnnotation")) {
+			BpmnTextAnnotation textAnnotation = new BpmnTextAnnotation("textAnnotation");
+			textAnnotation.importElement(xpp, bpmn);
+			textAnnotations.add(textAnnotation);
+			return true;
+		} else if (xpp.getName().equals("association")) {
+			BpmnAssociation association = new BpmnAssociation("association");
+			association.importElement(xpp, bpmn);
+			associations.add(association);
+			return true;
 		}
 		/*
 		 * Unknown tag.
@@ -55,6 +69,12 @@ public class BpmnCollaboration extends BpmnId {
 		}
 		for (BpmnMessageFlow messageFlow : messageFlows) {
 			s += messageFlow.exportElement();
+		}
+		for (BpmnTextAnnotation textAnnotation : textAnnotations) {
+			s += textAnnotation.exportElement();
+		}
+		for (BpmnAssociation association : associations) {
+			s += association.exportElement();
 		}
 		return s;
 	}
@@ -83,11 +103,43 @@ public class BpmnCollaboration extends BpmnId {
 		}
 	}
 	
+	public void unmarshallTextAnnotations(BPMNDiagram diagram, Map<String, BPMNNode> id2node) {
+		for (BpmnTextAnnotation textAnnotation : textAnnotations) {
+			textAnnotation.unmarshall(diagram, id2node);
+		}
+	}
+
+	public void unmarshallTextAnnotations(BPMNDiagram diagram, Collection<String> elements, Map<String, BPMNNode> id2node) {
+		for (BpmnTextAnnotation textAnnotation : textAnnotations) {
+			textAnnotation.unmarshall(diagram, elements, id2node);
+		}
+	}
+	
+	public void unmarshallAssociations(BPMNDiagram diagram, Map<String, BPMNNode> id2node) {
+		for (BpmnAssociation association : associations) {
+			association.unmarshall(diagram, id2node);
+		}
+	}
+
+	public void unmarshallAssociations(BPMNDiagram diagram, Collection<String> elements, Map<String, BPMNNode> id2node) {
+		for (BpmnAssociation association : associations) {
+			association.unmarshall(diagram, elements, id2node);
+		}
+	}
+	
 	public void addParticipant(BpmnParticipant participant) {
 		participants.add(participant);
 	}
 	
 	public void addMessageFlow(BpmnMessageFlow messageFlow) {
 		messageFlows.add(messageFlow);
+	}
+	
+	public void addTextAnnotation(BpmnTextAnnotation textAnnotation) {
+		textAnnotations.add(textAnnotation);
+	}
+	
+	public void addAssociation(BpmnAssociation association) {
+		associations.add(association);
 	}
 }

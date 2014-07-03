@@ -2,7 +2,10 @@ package org.processmining.plugins.bpmn.diagram;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
+import org.processmining.models.graphbased.directed.bpmn.BPMNNode;
+import org.processmining.models.graphbased.directed.bpmn.elements.SubProcess;
 import org.processmining.plugins.bpmn.Bpmn;
 import org.processmining.plugins.bpmn.BpmnIdName;
 import org.xmlpull.v1.XmlPullParser;
@@ -58,5 +61,19 @@ public class BpmnDiagram extends BpmnIdName {
 	
 	public void addPlane(BpmnDiPlane plane) {
 		planes.add(plane);
+	}
+	
+	public void unmarshallIsExpanded(Map<String, BPMNNode> id2node) {
+		for (BpmnDiPlane plane : planes) {
+			Collection<BpmnDiShape> shapes = plane.getShapes();
+			for (BpmnDiShape shape : shapes) {
+				String bpmnElement = shape.getBpmnElement();
+				Object o = id2node.get(bpmnElement);
+				if (o instanceof SubProcess) {
+					SubProcess subProcess = (SubProcess)o;
+					subProcess.setBCollapsed(!shape.isExpanded());
+				}
+			}
+		}
 	}
 }

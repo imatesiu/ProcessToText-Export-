@@ -5,23 +5,24 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-
-
-
-import org.processmining.contexts.uitopia.UIPluginContext;
+import org.jgraph.graph.AbstractCellView;
+import org.jgraph.graph.DefaultGraphCell;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.DirectedGraphNode;
 import org.processmining.models.graphbased.directed.bpmn.BPMNDiagram;
 import org.processmining.models.graphbased.directed.bpmn.BPMNEdge;
 import org.processmining.models.graphbased.directed.bpmn.BPMNNode;
+import org.processmining.models.graphbased.directed.bpmn.elements.Association;
 import org.processmining.models.graphbased.directed.bpmn.elements.MessageFlow;
+import org.processmining.models.graphbased.directed.bpmn.elements.SubProcess;
 import org.processmining.models.graphbased.directed.bpmn.elements.Swimlane;
+import org.processmining.models.graphbased.directed.bpmn.elements.TextAnnotation;
 import org.processmining.models.jgraph.ProMGraphModel;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.models.jgraph.elements.ProMGraphCell;
 import org.processmining.models.jgraph.elements.ProMGraphEdge;
+import org.processmining.models.jgraph.elements.ProMGraphPort;
 import org.processmining.models.jgraph.views.JGraphPortView;
 import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
 import org.processmining.plugins.bpmn.diagram.BpmnDcBounds;
@@ -34,13 +35,15 @@ import org.xmlpull.v1.XmlPullParser;
 
 public class BpmnDefinitions extends BpmnElement {
 
+	private Collection<BpmnResource> resources;
 	private Collection<BpmnProcess> processes;
 	private Collection<BpmnCollaboration> collaborations;
-	private Collection<BpmnMessage> messages;
+	private Collection<BpmnMessage> messages;	
 	private Collection<BpmnDiagram> diagrams;
 	
 	public BpmnDefinitions(String tag) {
 		super(tag);
+		resources = new HashSet<BpmnResource>();
 		processes = new HashSet<BpmnProcess>();
 		collaborations = new HashSet<BpmnCollaboration>();
 		messages = new HashSet<BpmnMessage>();
@@ -49,9 +52,10 @@ public class BpmnDefinitions extends BpmnElement {
 	
 	public BpmnDefinitions(String tag, BpmnDefinitionsBuilder builder) {
 		super(tag);
+		resources = builder.resources;
 		processes = builder.processes;
 		collaborations = builder.collaborations;
-		messages = new HashSet<BpmnMessage>();
+		messages = new HashSet<BpmnMessage>();		
 		diagrams = builder.diagrams;
 	}
 	
@@ -63,11 +67,13 @@ public class BpmnDefinitions extends BpmnElement {
 	 */
 	public static class BpmnDefinitionsBuilder {
 
+		private Collection<BpmnResource> resources;
 		private Collection<BpmnProcess> processes;
-		private Collection<BpmnCollaboration> collaborations;
+		private Collection<BpmnCollaboration> collaborations;	
 		private Collection<BpmnDiagram> diagrams;
-
-		public BpmnDefinitionsBuilder(UIPluginContext context, BPMNDiagram diagram) {
+		
+		public BpmnDefinitionsBuilder(PluginContext context, BPMNDiagram diagram) {
+			resources = new HashSet<BpmnResource>();
 			processes = new HashSet<BpmnProcess>();
 			collaborations = new HashSet<BpmnCollaboration>();
 			diagrams = new HashSet<BpmnDiagram>();
@@ -78,10 +84,10 @@ public class BpmnDefinitions extends BpmnElement {
 		/**
 		 * Build BpmnDefinitions from BPMNDiagram (BPMN picture)
 		 * 
-		 * @param context
+		 * @param context if null, then graphics info is not added
 		 * @param diagram
 		 */
-		private void buildFromDiagram(UIPluginContext context, BPMNDiagram diagram) {
+		private void buildFromDiagram(PluginContext context, BPMNDiagram diagram) {
 			BpmnCollaboration bpmnCollaboration = new BpmnCollaboration("collaboration");
 			bpmnCollaboration.setId("col_" + bpmnCollaboration.hashCode());
 
@@ -110,11 +116,33 @@ public class BpmnDefinitions extends BpmnElement {
 			}
 
 			// Build message flows
-			Set<MessageFlow> messageFlows = diagram.getMessageFlows();
-			for (MessageFlow messageFlow : messageFlows) {
+			for (MessageFlow messageFlow : diagram.getMessageFlows()) {
 				BpmnMessageFlow bpmnMessageFlow = new BpmnMessageFlow("messageFlow");
 				bpmnMessageFlow.marshall(messageFlow);
 				bpmnCollaboration.addMessageFlow(bpmnMessageFlow);
+			}
+			
+			// Build text annotations
+			for (TextAnnotation textAnnotation : diagram.getTextAnnotations(null)) {
+				BpmnTextAnnotation bpmnTextAnnotation = new BpmnTextAnnotation("textAnnotation");
+				bpmnTextAnnotation.marshall(textAnnotation);
+				bpmnCollaboration.addTextAnnotation(bpmnTextAnnotation);;
+			}
+			
+			// Build associations
+			for (Association association : diagram.getAssociations(null)) {
+				BpmnAssociation bpmnAssociation = new BpmnAssociation("association");
+				bpmnAssociation.marshall(association);
+				bpmnCollaboration.addAssociation(bpmnAssociation);
+			}
+			
+			// Build resources
+			for(Swimlane swimlane : diagram.getSwimlanes()) {
+				if(swimlane.getPartitionElement() != null) {
+					BpmnResource resource = new BpmnResource("resource");
+					resource.marshall(swimlane);
+					resources.add(resource);
+				}
 			}
 			
 			// Build graphics info
@@ -129,7 +157,9 @@ public class BpmnDefinitions extends BpmnElement {
 				plane.setBpmnElement(intBpmnProcess.id);
 			}
 			bpmnDiagram.addPlane(plane);
-			fillGraphicsInfo(context, diagram, bpmnDiagram, plane);
+			if(context != null) {
+				fillGraphicsInfo(context, diagram, bpmnDiagram, plane);
+			}
 
 			diagrams.add(bpmnDiagram);
 		}
@@ -142,7 +172,7 @@ public class BpmnDefinitions extends BpmnElement {
 		 * @param bpmnDiagram
 		 * @param plane
 		 */
-		private void fillGraphicsInfo(UIPluginContext context, BPMNDiagram diagram,
+		private synchronized void fillGraphicsInfo(PluginContext context, BPMNDiagram diagram,
 				BpmnDiagram bpmnDiagram, BpmnDiPlane plane) {
 
 			// Construct graph info
@@ -153,6 +183,12 @@ public class BpmnDefinitions extends BpmnElement {
 				if (o instanceof ProMGraphCell) {
 					ProMGraphCell graphCell = (ProMGraphCell) o;
 					addCellGraphicsInfo(graphCell, plane);
+				}
+				if (o instanceof ProMGraphPort) {
+					ProMGraphPort graphPort = (ProMGraphPort) o;
+					if(graphPort.getBoundingNode() != null) {
+						addCellGraphicsInfo(graphPort, plane);
+					}
 				}
 				if (o instanceof ProMGraphEdge) {
 					ProMGraphEdge graphEdge = (ProMGraphEdge) o;
@@ -167,17 +203,42 @@ public class BpmnDefinitions extends BpmnElement {
 		 * @param graphCell
 		 * @param plane
 		 */
-		private void addCellGraphicsInfo(ProMGraphCell graphCell, BpmnDiPlane plane) {
-			DirectedGraphNode graphNode = graphCell.getNode();
+		private void addCellGraphicsInfo(DefaultGraphCell graphCell, BpmnDiPlane plane) {
+			DirectedGraphNode graphNode = null;
+			if(graphCell instanceof ProMGraphCell) {
+				graphNode = ((ProMGraphCell)graphCell).getNode();
+			} else if (graphCell instanceof ProMGraphPort) {
+				graphNode = ((ProMGraphPort)graphCell).getBoundingNode();
+			}
 			// Create BPMNShape
 			String bpmnElement = graphNode.getId().toString().replace(' ', '_');
-			Rectangle2D rectangle = graphCell.getView().getBounds();
+			boolean isExpanded = false;
+			boolean isHorizontal = false;
+			if(graphNode instanceof SubProcess) {
+				SubProcess subProcess = (SubProcess)graphNode;
+				if(!subProcess.isBCollapsed()) {
+					isExpanded = true;
+				}
+			}
+			if(graphNode instanceof Swimlane) {				
+				isExpanded = true;
+				isHorizontal = true;
+			}
+			AbstractCellView view = null;
+			if(graphCell instanceof ProMGraphCell) {
+				view = ((ProMGraphCell)graphCell).getView();
+			} else if(graphCell instanceof ProMGraphPort) {
+				view = ((ProMGraphPort)graphCell).getView();
+			}
+			Rectangle2D rectangle = view.getBounds();
+			
 			double x = rectangle.getX();
 			double y = rectangle.getY();
 			double width = rectangle.getWidth();
 			double height = rectangle.getHeight();
+			
 			BpmnDcBounds bounds = new BpmnDcBounds("dc:Bounds", x, y, width, height);
-			BpmnDiShape shape = new BpmnDiShape("bpmndi:BPMNShape", bpmnElement, bounds);
+			BpmnDiShape shape = new BpmnDiShape("bpmndi:BPMNShape", bpmnElement, bounds, isExpanded, isHorizontal);
 			plane.addShape(shape);
 			addChildGrapInfo(graphCell, plane);
 		}
@@ -219,11 +280,17 @@ public class BpmnDefinitions extends BpmnElement {
 		 * @param graphCell
 		 * @param plane
 		 */
-		private void addChildGrapInfo(ProMGraphCell graphCell, BpmnDiPlane plane){
+		private void addChildGrapInfo(DefaultGraphCell graphCell, BpmnDiPlane plane){
 			for (Object o : graphCell.getChildren()) {
 				if (o instanceof ProMGraphCell) {
 					ProMGraphCell childGraphCell = (ProMGraphCell) o;
 					addCellGraphicsInfo(childGraphCell, plane);
+				}
+				if (o instanceof ProMGraphPort) {
+					ProMGraphPort childGraphPort = (ProMGraphPort) o;
+					if(childGraphPort.getBoundingNode() != null) {
+						addCellGraphicsInfo(childGraphPort, plane);
+					}
 				}
 				if (o instanceof ProMGraphEdge) {
 					ProMGraphEdge childGraphEdge = (ProMGraphEdge) o;
@@ -254,6 +321,11 @@ public class BpmnDefinitions extends BpmnElement {
 			BpmnMessage message = new BpmnMessage("message");
 			message.importElement(xpp, bpmn);
 			messages.add(message);
+			return true; 
+		} else if (xpp.getName().equals("resource")) {
+			BpmnResource resource = new BpmnResource("resource");
+			resource.importElement(xpp, bpmn);
+			resources.add(resource);
 			return true;
 		} else if (xpp.getName().equals("BPMNDiagram")) {
 			BpmnDiagram diagram = new BpmnDiagram("BPMNDiagram");
@@ -272,6 +344,9 @@ public class BpmnDefinitions extends BpmnElement {
 		 * Export node child elements.
 		 */
 		String s = super.exportElements();
+		for (BpmnResource resource : resources) {
+			s += resource.exportElement();
+		}
 		for (BpmnProcess process : processes) {
 			s += process.exportElement();
 		}
@@ -296,6 +371,11 @@ public class BpmnDefinitions extends BpmnElement {
 		}
 		for (BpmnCollaboration collaboration : collaborations) {
 			collaboration.unmarshallMessageFlows(diagram, id2node);
+			collaboration.unmarshallTextAnnotations(diagram, id2node);
+			collaboration.unmarshallAssociations(diagram, id2node);
+		}
+		for (BpmnDiagram bpmnDiagram : diagrams) {
+			bpmnDiagram.unmarshallIsExpanded(id2node);
 		}
 	}
 
@@ -308,7 +388,28 @@ public class BpmnDefinitions extends BpmnElement {
 		}
 		for (BpmnCollaboration collaboration : collaborations) {
 			collaboration.unmarshallMessageFlows(diagram, elements, id2node);
+			collaboration.unmarshallTextAnnotations(diagram, elements, id2node);
+			collaboration.unmarshallAssociations(diagram, elements, id2node);
 		}
+		for (BpmnDiagram bpmnDiagram : diagrams) {
+			bpmnDiagram.unmarshallIsExpanded(id2node);
+		}
+	}
+	
+	public Collection<BpmnResource> getResources() {
+		return resources;
+	}
+	
+	public Collection<BpmnProcess> getProcesses() {
+		return processes;
+	}
+
+	public Collection<BpmnCollaboration> getCollaborations() {
+		return collaborations;
+	}
+	
+	public Collection<BpmnMessage> getMessages() {
+		return messages;
 	}
 	
 	public Collection<BpmnDiagram> getDiagrams() {

@@ -1,5 +1,6 @@
 package org.processmining.models.graphbased.directed.bpmn;
 
+import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.EdgeID;
 import org.processmining.models.graphbased.directed.AbstractDirectedGraphEdge;
 import org.processmining.models.graphbased.directed.ContainableDirectedGraphElement;
@@ -61,5 +62,10 @@ public abstract class BPMNEdge<S extends BPMNNode, T extends BPMNNode> extends A
 	public String getLabel() {
 		String label = super.getLabel();
 		return NO_LABEL.equals(label)? "" : label;
+	}
+	
+	public void setLabel(String newLabel) {
+		getAttributeMap().put(AttributeMap.LABEL, newLabel);
+		getAttributeMap().put(AttributeMap.SHOWLABEL, true);
 	}
 }

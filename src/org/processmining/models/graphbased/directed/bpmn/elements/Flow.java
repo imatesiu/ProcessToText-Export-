@@ -13,25 +13,29 @@ import org.processmining.models.shapes.Decorated;
 public class Flow extends BPMNEdge<BPMNNode, BPMNNode> implements Decorated {
 	
 	private IGraphElementDecoration decorator = null;
+	
+	private String conditionExpression;
+	
+	private String textAnnotation;
 
 	public Flow(BPMNNode source, BPMNNode target, String label) {
 		super(source, target);
 		fillAttributes(label);
 	}
 
+	@Deprecated
 	public Flow(BPMNNode source, BPMNNode target, SubProcess parentSubProcess, String label) {
 		super(source, target, parentSubProcess);
 		fillAttributes(label);
 	}
 
+	@Deprecated
 	public Flow(BPMNNode source, BPMNNode target, Swimlane parentSwimlane, String label) {
 		super(source, target, parentSwimlane);
 		fillAttributes(label);
 	}
 
-	/**
-	 * 
-	 */
+
 	private void fillAttributes(String label) {
 		getAttributeMap().put(AttributeMap.EDGEEND, ArrowType.ARROWTYPE_CLASSIC);
 		getAttributeMap().put(AttributeMap.EDGEENDFILLED, true);
@@ -43,6 +47,7 @@ public class Flow extends BPMNEdge<BPMNNode, BPMNNode> implements Decorated {
 		}
 	}
 
+	@Deprecated
 	public Swimlane getParentSwimlane() {
 		if (getParent() != null) {
 			if (getParent() instanceof Swimlane)
@@ -53,6 +58,7 @@ public class Flow extends BPMNEdge<BPMNNode, BPMNNode> implements Decorated {
 		return null;
 	}
 	
+	@Deprecated
 	public Swimlane getParentPool() {
 		ContainingDirectedGraphNode parent = getParent();
 		while (parent != null) {
@@ -71,6 +77,7 @@ public class Flow extends BPMNEdge<BPMNNode, BPMNNode> implements Decorated {
 		return null;
 	}
 
+	@Deprecated
 	public SubProcess getParentSubProcess() {
 		if (getParent() != null) {
 			if (getParent() instanceof SubProcess)
@@ -97,5 +104,21 @@ public class Flow extends BPMNEdge<BPMNNode, BPMNNode> implements Decorated {
 		if (decorator != null) {
 			decorator.decorate(g2d, x, y, width, height);
 		}
+	}
+	
+	public void setConditionExpression(String conditionExpression) {
+		this.conditionExpression = conditionExpression;
+	}
+	
+	public String getConditionExpression() {
+		return conditionExpression;
+	}
+	
+	public String getTextAnnotation() {
+		return textAnnotation;
+	}
+
+	public void setTextAnnotation(String textAnnotation) {
+		this.textAnnotation = textAnnotation;
 	}
 }

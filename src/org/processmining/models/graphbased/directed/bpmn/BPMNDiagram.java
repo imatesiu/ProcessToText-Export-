@@ -5,6 +5,9 @@ import java.util.Set;
 
 import org.processmining.models.graphbased.directed.DirectedGraph;
 import org.processmining.models.graphbased.directed.bpmn.elements.Activity;
+import org.processmining.models.graphbased.directed.bpmn.elements.Association;
+import org.processmining.models.graphbased.directed.bpmn.elements.DataAssociation;
+import org.processmining.models.graphbased.directed.bpmn.elements.DataObject;
 import org.processmining.models.graphbased.directed.bpmn.elements.Event;
 import org.processmining.models.graphbased.directed.bpmn.elements.Event.EventTrigger;
 import org.processmining.models.graphbased.directed.bpmn.elements.Event.EventType;
@@ -16,6 +19,8 @@ import org.processmining.models.graphbased.directed.bpmn.elements.MessageFlow;
 import org.processmining.models.graphbased.directed.bpmn.elements.SubProcess;
 import org.processmining.models.graphbased.directed.bpmn.elements.Swimlane;
 import org.processmining.models.graphbased.directed.bpmn.elements.SwimlaneType;
+import org.processmining.models.graphbased.directed.bpmn.elements.TextAnnotation;
+import org.processmining.plugins.bpmn.BpmnAssociation.AssociationDirection;
 
 public interface BPMNDiagram extends DirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> {
 
@@ -46,6 +51,16 @@ public interface BPMNDiagram extends DirectedGraph<BPMNNode, BPMNEdge<? extends 
 
 	SubProcess addSubProcess(String label, boolean bLooped, boolean bAdhoc, boolean bCompensation,
 			boolean bMultiinstance, boolean bCollapsed, Swimlane parentSwimlane);
+	
+	SubProcess addSubProcess(String label, boolean bLooped, boolean bAdhoc, boolean bCompensation,
+			boolean bMultiinstance, boolean bCollapsed, boolean bTriggeredByEvent);
+
+	SubProcess addSubProcess(String label, boolean bLooped, boolean bAdhoc, boolean bCompensation,
+			boolean bMultiinstance, boolean bCollapsed, boolean bTriggeredByEvent, SubProcess parentSubProcess);
+
+	SubProcess addSubProcess(String label, boolean bLooped, boolean bAdhoc, boolean bCompensation,
+			boolean bMultiinstance, boolean bCollapsed, boolean bTriggeredByEvent, Swimlane parentSwimlane);
+
 
 	Activity removeSubProcess(SubProcess subprocess);
 
@@ -54,14 +69,26 @@ public interface BPMNDiagram extends DirectedGraph<BPMNNode, BPMNEdge<? extends 
 	Collection<SubProcess> getSubProcesses(Swimlane pool);
 
 	//Events
+	@Deprecated
 	Event addEvent(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
 			Activity exceptionFor);
 
+	@Deprecated
 	Event addEvent(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
 			SubProcess parentSubProcess, Activity exceptionFor);
 
+	@Deprecated
 	Event addEvent(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
 			Swimlane parentSwimlane, Activity exceptionFor);
+	
+	Event addEvent(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
+			boolean isInterrupting, Activity exceptionFor);
+
+	Event addEvent(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
+			SubProcess parentSubProcess, boolean isInterrupting, Activity exceptionFor);
+
+	Event addEvent(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
+			Swimlane parentSwimlane, boolean isInterrupting, Activity exceptionFor);
 
 	Event removeEvent(Event event);
 
@@ -81,17 +108,41 @@ public interface BPMNDiagram extends DirectedGraph<BPMNNode, BPMNEdge<? extends 
 	Collection<Gateway> getGateways();
 	
 	Collection<Gateway> getGateways(Swimlane pool);
+	
+	//Data objects
+	DataObject addDataObject(String label);
+
+	DataObject removeDataObject(DataObject dataObject);
+	
+	Collection<DataObject> getDataObjects();
+	
+	//Artifacts
+	TextAnnotation addTextAnnotation(String label);
+	
+	Collection<TextAnnotation> getTextAnnotations();
+	
+	Collection<TextAnnotation> getTextAnnotations(Swimlane pool);
+	
+	Association addAssociation(BPMNNode source, BPMNNode target, AssociationDirection direction);
+	
+	Collection<Association> getAssociations();
+	
+	Collection<Association> getAssociations(Swimlane pool);
 
 	//Flows
 	Flow addFlow(BPMNNode source, BPMNNode target, String label);
 
+	@Deprecated	
 	Flow addFlow(BPMNNode source, BPMNNode target, Swimlane parent, String label);
 
+	@Deprecated
 	Flow addFlow(BPMNNode source, BPMNNode target, SubProcess parent, String label);
 
 	Set<Flow> getFlows();
 	
 	Set<Flow> getFlows(Swimlane pool);
+	
+	Set<Flow> getFlows(SubProcess subProcess);
 
 	//MessageFlows
 	MessageFlow addMessageFlow(BPMNNode source, BPMNNode target, String label);
@@ -101,6 +152,11 @@ public interface BPMNDiagram extends DirectedGraph<BPMNNode, BPMNEdge<? extends 
 	MessageFlow addMessageFlow(BPMNNode source, BPMNNode target, SubProcess parent, String label);
 
 	Set<MessageFlow> getMessageFlows();
+	
+	//DataAssociatons
+	DataAssociation addDataAssociation(BPMNNode source, BPMNNode target, String label);
+	
+	Collection<DataAssociation> getDataAssociations();
 
 	/**
 	 * @deprecated use {@link  addSwimlane(String label, Swimlane parentSwimlane, 

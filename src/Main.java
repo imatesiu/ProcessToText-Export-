@@ -83,7 +83,7 @@ public class Main {
 		lDeriver = new EnglishLabelDeriver(lHelper);
 
 		// Load and generate from JSON files in directory
-		// createFromFile(file);
+		 //createFromFile(file);
 		createFromFileFromBPMN(fileBP);
 	}
 
@@ -122,6 +122,8 @@ public class Main {
 		sentencePlan = refExpGenerator.insertReferringExpressions(sentencePlan,
 				model, false);
 
+		System.out.print(sentencePlan);
+		
 		// Discourse Marker
 		DiscourseMarker discourseMarker = new DiscourseMarker();
 		sentencePlan = discourseMarker.insertSequenceConnectives(sentencePlan);
@@ -330,7 +332,7 @@ public class Main {
 						.getLabel().replaceAll("\n", " "), laneMap.get(task
 						.getParentLane().hashCode()), poolMap.get(task
 						.getParentPool().hashCode()),
-						ActivityType.TYPE_MAP.get(taskType(task)));
+						taskType(task));
 			}
 			if (task.getParentSubProcess() != null) {
 				activity.setSubProcessID(task.getId().hashCode());

@@ -94,7 +94,7 @@ public class SurfaceRealizer {
 	public String realizeSentence(DSynTSentence s, int level, int lastLevel) {
 		Document xmldoc = s.getDSynT();
 		writeXMl(xmldoc);
-	//	realproManager.realize(xmldoc);
+		realproManager.realize(xmldoc);
 		String output = "";
 		if (level != lastLevel || s.getExecutableFragment().sen_hasBullet) {
 			output = output + "\n";

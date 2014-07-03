@@ -1,5 +1,6 @@
 package org.processmining.models.graphbased.directed.bpmn.elements;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -21,7 +22,7 @@ public class Event extends BPMNNode implements Decorated, BoundaryDirectedGraphN
 	
 	private IGraphElementDecoration decorator = null;
 	
-	private String isInterrupting;
+	private boolean isInterrupting = true;
 	
 	private String parallelMultiple;
 	
@@ -45,38 +46,64 @@ public class Event extends BPMNNode implements Decorated, BoundaryDirectedGraphN
 	public Event(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse, Activity exceptionFor) {
 		super(bpmndiagram);
-		fillAttributes(label, eventType, eventTrigger, eventUse, exceptionFor);
+		fillAttributes(label, eventType, eventTrigger, eventUse, true, exceptionFor);
 	}
 
 	public Event(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
 			SubProcess parentSubProcess, Activity exceptionFor) {
 		super(bpmndiagram, parentSubProcess);
-		fillAttributes(label, eventType, eventTrigger, eventUse, exceptionFor);
+		fillAttributes(label, eventType, eventTrigger, eventUse, true, exceptionFor);
 	}
 
 	public Event(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
 			String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse, Swimlane parentSwimlane,
 			Activity exceptionFor) {
 		super(bpmndiagram, parentSwimlane);
-		fillAttributes(label, eventType, eventTrigger, eventUse, exceptionFor);
+		fillAttributes(label, eventType, eventTrigger, eventUse, true, exceptionFor);
+	}
+	
+	public Event(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
+			String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse, 
+			boolean isInterrupting, Activity exceptionFor) {
+		super(bpmndiagram);
+		fillAttributes(label, eventType, eventTrigger, eventUse, isInterrupting, exceptionFor);
 	}
 
+	public Event(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
+			String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
+			SubProcess parentSubProcess, boolean isInterrupting, Activity exceptionFor) {
+		super(bpmndiagram, parentSubProcess);
+		fillAttributes(label, eventType, eventTrigger, eventUse, isInterrupting, exceptionFor);
+	}
+
+	public Event(AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> bpmndiagram,
+			String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse, Swimlane parentSwimlane,
+			boolean isInterrupting, Activity exceptionFor) {
+		super(bpmndiagram, parentSwimlane);
+		fillAttributes(label, eventType, eventTrigger, eventUse, isInterrupting, exceptionFor);
+	}
+	
 	/**
 	 * @param label
 	 * @param eventType
 	 * @param eventTrigger
 	 * @param eventUse
+	 * @param isInterrupting
 	 * @param exceptionFor
 	 */
 	private void fillAttributes(String label, EventType eventType, EventTrigger eventTrigger, EventUse eventUse,
-			Activity exceptionFor) {
+			boolean isInterrupting, Activity exceptionFor) {
 		this.eventType = eventType;
 		this.eventTrigger = eventTrigger;
 		this.eventUse = eventUse;
+		this.isInterrupting = isInterrupting;
 		this.exceptionFor = exceptionFor;
 		if (eventType == EventType.END) {
 			getAttributeMap().put(AttributeMap.BORDERWIDTH, 3);
+		}
+		if(!isInterrupting) {
+			getAttributeMap().put(AttributeMap.DASHPATTERN, new float[] { (float)3.0, (float)3.0 });
 		}
 		getAttributeMap().put(AttributeMap.LABEL, label);
 		getAttributeMap().put(AttributeMap.SHOWLABEL, false);
@@ -84,10 +111,12 @@ public class Event extends BPMNNode implements Decorated, BoundaryDirectedGraphN
 		getAttributeMap().put(AttributeMap.SQUAREBB, true);
 		getAttributeMap().put(AttributeMap.RESIZABLE, false);
 		if(exceptionFor==null) {
-			getAttributeMap().put(AttributeMap.SIZE, new Dimension(50, 50));
+			getAttributeMap().put(AttributeMap.SIZE, new Dimension(30, 30));
 		} else {
+			exceptionFor.incNumOfBoundaryEvents();
 			getAttributeMap().put(AttributeMap.SIZE, new Dimension(25, 25));
-			getAttributeMap().put(AttributeMap.PORTOFFSET, new Point2D.Double(800, 1000));
+			getAttributeMap().put(AttributeMap.PORTOFFSET, 
+					new Point2D.Double(1000 - exceptionFor.getNumOfBoundaryEvents()*80, 1000));
 			getAttributeMap().put(AttributeMap.FILLCOLOR, Color.WHITE);
 		}
 	}
@@ -245,13 +274,13 @@ public class Event extends BPMNNode implements Decorated, BoundaryDirectedGraphN
 		at = new AffineTransform();
 		at.translate(x, y);
 		eventDecorator.transform(at);
-
+			
+		g2d.setStroke(new BasicStroke(1));
 		if (eventUse == EventUse.CATCH) {
 			g2d.draw(eventDecorator);
 		} else if (eventUse == EventUse.THROW) {
 			g2d.fill(eventDecorator);
 		}
-		
 		//eventDecorator.closePath();
 		if (decorator!=null) {
 			decorator.decorate(g2d, x, y, width, height);
@@ -298,12 +327,14 @@ public class Event extends BPMNNode implements Decorated, BoundaryDirectedGraphN
 		this.decorator = decorator;
 	}
 	
+	@Deprecated
 	public String isInterrupting() {
-		return isInterrupting;
+		return new Boolean(isInterrupting).toString();
 	}
 	
+	@Deprecated
 	public void setInterrupting(String isInterrupting) {
-		this.isInterrupting = isInterrupting;
+		this.isInterrupting = isInterrupting.equals("false")? false : true;
 	}
 	
 	public String getParallelMultiple() {

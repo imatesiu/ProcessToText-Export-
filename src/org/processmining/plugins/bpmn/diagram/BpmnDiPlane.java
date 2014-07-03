@@ -97,4 +97,8 @@ public class BpmnDiPlane extends BpmnElement {
 	public void setBpmnElement(String bpmnElement) {
 		this.bpmnElement = bpmnElement;
 	}
+	
+	public Collection<BpmnDiShape> getShapes() {
+		return shapes;
+	}
 }
