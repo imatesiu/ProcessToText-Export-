@@ -38,6 +38,7 @@ import com.itextpdf.text.DocumentException;
 import contentDetermination.labelAnalysis.EnglishLabelDeriver;
 import contentDetermination.labelAnalysis.EnglishLabelHelper;
 import dataModel.dsynt.DSynTSentence;
+import dataModel.intermediate.ExecutableFragment;
 import dataModel.jsonIntermediate.JSONArc;
 import dataModel.jsonIntermediate.JSONElem;
 import dataModel.jsonIntermediate.JSONEvent;
@@ -128,7 +129,7 @@ public class Main {
 		DiscourseMarker discourseMarker = new DiscourseMarker();
 		sentencePlan = discourseMarker.insertSequenceConnectives(sentencePlan);
 
-		System.out.print(sentencePlan);
+		PrintArrayListDSynTSentence(sentencePlan);
 
 		// Realization
 		SurfaceRealizer surfaceRealizer = new SurfaceRealizer();
@@ -197,7 +198,16 @@ public class Main {
 		}
 
 	}
-
+private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
+	String Out="";
+	for (DSynTSentence dSynTSentence : AD) {
+		 ExecutableFragment efrag = dSynTSentence.getExecutableFragment();
+		Out+= efrag.getAction()+" "+efrag.getAddition()+" "+efrag.getBo();
+	}
+	out.println("");
+	out.println(Out);
+}
+	
 	private static BPMNDiagram BpmnSelectDiagram(Bpmn bpmn) {
 		Collection<BpmnDiagram> cbpmn = bpmn.getDiagrams();
 		String namebpd = "";
