@@ -93,7 +93,7 @@ public class TextToIntermediateConverter {
 			for (RPSTNode<ControlFlow, Node> tNode : rpst.getChildren(pNode)) {
 				if (tNode.getEntry() == node.getEntry()) {
 					for (Arc arc : process.getArcs().values()) {
-						System.out.println(arc.getLabel());
+						//System.out.println(arc.getLabel());
 						if (arc.getSource().getId() == Integer.valueOf(tNode
 								.getEntry().getId())
 								&& arc.getTarget().getId() == Integer

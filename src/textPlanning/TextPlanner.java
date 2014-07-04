@@ -200,12 +200,12 @@ public class TextPlanner {
 						sentencePlan.add(postStatement);
 					}
 				}
-					
+				if(convRecord!=null){
 				// Pass post fragment
 				if (convRecord.post != null) {
 					passedFragments.add(convRecord.post);
 				}
-			
+				}
 			//**************************************  RIGIDS *******************************************
 			} else if (PlanningHelper.isRigid(node)){
 				
@@ -800,10 +800,12 @@ public class TextPlanner {
 			GatewayExtractor gwExtractor = new GatewayExtractor(node.getEntry(), lHelper);
 			
 			// Add sentence
-			for (DSynTSentence s: textToIMConverter.convertXORSimple(node, gwExtractor)) {
-				sentencePlan.add(s);
-			}
+			//for (DSynTSentence s: textToIMConverter.convertXORSimple(node, gwExtractor)) {
+			//	sentencePlan.add(s);
+			//}
+			sentencePlan.addAll(textToIMConverter.convertXORSimple(node, gwExtractor));
 			return null;
+			
 		// General case
 		} else {
 			return textToIMConverter.convertXORGeneral(node);

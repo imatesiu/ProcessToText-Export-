@@ -36,7 +36,9 @@ import com.itextpdf.text.DocumentException;
 
 import contentDetermination.labelAnalysis.EnglishLabelDeriver;
 import contentDetermination.labelAnalysis.EnglishLabelHelper;
+import dataModel.dsynt.DSynTConditionSentence;
 import dataModel.dsynt.DSynTSentence;
+import dataModel.intermediate.ConditionFragment;
 import dataModel.intermediate.ExecutableFragment;
 import dataModel.jsonIntermediate.JSONArc;
 import dataModel.jsonIntermediate.JSONElem;
@@ -83,8 +85,9 @@ public class Main {
 		lDeriver = new EnglishLabelDeriver(lHelper);
 
 		// Load and generate from JSON files in directory
-		// createFromFile(file);
-		createFromFileFromBPMN(fileBP);
+		//createFromFile(file);
+		//
+			createFromFileFromBPMN(fileBP);
 	}
 
 	/**
@@ -122,8 +125,8 @@ public class Main {
 		sentencePlan = refExpGenerator.insertReferringExpressions(sentencePlan,
 				model, false);
 
-		System.out.print(sentencePlan);
-
+		//System.out.print(sentencePlan);
+		PrintArrayListDSynTSentence(sentencePlan);
 		// Discourse Marker
 		DiscourseMarker discourseMarker = new DiscourseMarker();
 		sentencePlan = discourseMarker.insertSequenceConnectives(sentencePlan);
@@ -201,10 +204,21 @@ public class Main {
 	private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD) {
 		String Out = "";
 		for (DSynTSentence dSynTSentence : AD) {
+			if(dSynTSentence instanceof DSynTConditionSentence){
+				ConditionFragment cefrag = ((DSynTConditionSentence) dSynTSentence).getConditionFragment();
+				ExecutableFragment eefrag = dSynTSentence.getExecutableFragment();
+				Out += cefrag.getAction() + " " + cefrag.getAddition() + " "
+						+ cefrag.getBo() + " ";
+				Out += eefrag.getAction() + " " + eefrag.getAddition() + " "
+						+ eefrag.getBo() + " ";
+				
+			}else{
 			ExecutableFragment efrag = dSynTSentence.getExecutableFragment();
 			Out += efrag.getAction() + " " + efrag.getAddition() + " "
-					+ efrag.getBo() + " ";
-			out.println("\n");
+					+ efrag.getBo() + " "+efrag.getAllMods()+" ";
+			}
+			String  f;
+			
 		}
 		out.println("");
 		out.println(Out);

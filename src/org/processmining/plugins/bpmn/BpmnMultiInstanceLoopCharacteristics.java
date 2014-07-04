@@ -22,6 +22,11 @@ public class BpmnMultiInstanceLoopCharacteristics extends BpmnIncomingOutgoing {
 		oneBehaviorEventRef = null;
 		noneBehaviorEventRef = null;
 	}
+	
+	protected void checkValidity(Bpmn bpmn) {
+		//checkRequired(bpmn, "id", id);
+		//dont require id
+	}
 
 	protected void importAttributes(XmlPullParser xpp, Bpmn bpmn) {
 		super.importAttributes(xpp, bpmn);
