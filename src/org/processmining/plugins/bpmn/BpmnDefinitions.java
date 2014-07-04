@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.jgraph.graph.AbstractCellView;
 import org.jgraph.graph.DefaultGraphCell;
-import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.DirectedGraphNode;
 import org.processmining.models.graphbased.directed.bpmn.BPMNDiagram;
 import org.processmining.models.graphbased.directed.bpmn.BPMNEdge;
@@ -72,13 +71,13 @@ public class BpmnDefinitions extends BpmnElement {
 		private Collection<BpmnCollaboration> collaborations;	
 		private Collection<BpmnDiagram> diagrams;
 		
-		public BpmnDefinitionsBuilder(PluginContext context, BPMNDiagram diagram) {
+		public BpmnDefinitionsBuilder(/*PluginContext context,*/ BPMNDiagram diagram) {
 			resources = new HashSet<BpmnResource>();
 			processes = new HashSet<BpmnProcess>();
 			collaborations = new HashSet<BpmnCollaboration>();
 			diagrams = new HashSet<BpmnDiagram>();
 
-			buildFromDiagram(context, diagram);
+			//buildFromDiagram(context, diagram);
 		}
 
 		/**
@@ -87,7 +86,7 @@ public class BpmnDefinitions extends BpmnElement {
 		 * @param context if null, then graphics info is not added
 		 * @param diagram
 		 */
-		private void buildFromDiagram(PluginContext context, BPMNDiagram diagram) {
+		/*private void buildFromDiagram(PluginContext context, BPMNDiagram diagram) {
 			BpmnCollaboration bpmnCollaboration = new BpmnCollaboration("collaboration");
 			bpmnCollaboration.setId("col_" + bpmnCollaboration.hashCode());
 
@@ -162,7 +161,7 @@ public class BpmnDefinitions extends BpmnElement {
 			}
 
 			diagrams.add(bpmnDiagram);
-		}
+		}*/
 
 		/**
 		 * Fill graphics info
@@ -172,7 +171,7 @@ public class BpmnDefinitions extends BpmnElement {
 		 * @param bpmnDiagram
 		 * @param plane
 		 */
-		private synchronized void fillGraphicsInfo(PluginContext context, BPMNDiagram diagram,
+	/*	private synchronized void fillGraphicsInfo(PluginContext context, BPMNDiagram diagram,
 				BpmnDiagram bpmnDiagram, BpmnDiPlane plane) {
 
 			// Construct graph info
@@ -195,7 +194,7 @@ public class BpmnDefinitions extends BpmnElement {
 					addEdgeGraphInfo(graphEdge, plane);
 				}
 			}
-		}
+		}*/
 		
 		/**
 		 * Retrieve graphics info from graphCell

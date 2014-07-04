@@ -36,10 +36,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/Users/isiu/Downloads/stanford-postagger-2014-06-16/stanford-postagger.jar"/>
 	<classpathentry kind="lib" path="lib/xpp3-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="/ProM/lib/OpenXES.jar"/>
 	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Models.jar"/>
-	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Contexts.jar"/>
-	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Framework.jar"/>
 	<classpathentry kind="lib" path="/PNetReplayer/stdlib/jgraph.jar"/>
+	<classpathentry kind="lib" path="/PNetReplayer/stdlib/ProM-Framework.jar"/>
+	<classpathentry kind="lib" path="/ProM/lib/OpenXES.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

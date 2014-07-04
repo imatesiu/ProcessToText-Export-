@@ -12,7 +12,7 @@ import org.processmining.models.graphbased.directed.bpmn.elements.SwimlaneType;
 
 public abstract class BPMNNode extends AbstractDirectedGraphNode implements ContainableDirectedGraphElement {
 	
-	public static final Color ABSTRACTBACKGROUNDCOLOR = new Color(120, 140, 248);
+/*	public static final Color ABSTRACTBACKGROUNDCOLOR = new Color(120, 140, 248);
 	public static final Color ABSTRACTBORDERCOLOR = new Color(20, 20, 20);
 	public static final Color ABSTRACTTEXTCOLOR = new Color(10, 10, 10, 240);
 
@@ -30,7 +30,7 @@ public abstract class BPMNNode extends AbstractDirectedGraphNode implements Cont
 
 	public static final Color PRIMITIVEBACKGROUNDCOLOR = new Color(240, 230, 200);
 	public static final Color PRIMITIVEBORDERCOLOR = new Color(20, 20, 20);
-	public static final Color PRIMITIVETEXTCOLOR = new Color(0, 0, 0, 230);
+	public static final Color PRIMITIVETEXTCOLOR = new Color(0, 0, 0, 230);*/
 	
 	
 	private final AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>> graph;

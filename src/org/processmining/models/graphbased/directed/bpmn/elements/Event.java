@@ -107,17 +107,17 @@ public class Event extends BPMNNode implements Decorated, BoundaryDirectedGraphN
 		}
 		getAttributeMap().put(AttributeMap.LABEL, label);
 		getAttributeMap().put(AttributeMap.SHOWLABEL, false);
-		getAttributeMap().put(AttributeMap.SHAPE, new Ellipse());
+	//	getAttributeMap().put(AttributeMap.SHAPE, new Ellipse());
 		getAttributeMap().put(AttributeMap.SQUAREBB, true);
 		getAttributeMap().put(AttributeMap.RESIZABLE, false);
 		if(exceptionFor==null) {
-			getAttributeMap().put(AttributeMap.SIZE, new Dimension(30, 30));
+		//	getAttributeMap().put(AttributeMap.SIZE, new Dimension(30, 30));
 		} else {
 			exceptionFor.incNumOfBoundaryEvents();
-			getAttributeMap().put(AttributeMap.SIZE, new Dimension(25, 25));
-			getAttributeMap().put(AttributeMap.PORTOFFSET, 
-					new Point2D.Double(1000 - exceptionFor.getNumOfBoundaryEvents()*80, 1000));
-			getAttributeMap().put(AttributeMap.FILLCOLOR, Color.WHITE);
+		//	getAttributeMap().put(AttributeMap.SIZE, new Dimension(25, 25));
+		//	getAttributeMap().put(AttributeMap.PORTOFFSET, 
+		// w			new Point2D.Double(1000 - exceptionFor.getNumOfBoundaryEvents()*80, 1000));
+		//	getAttributeMap().put(AttributeMap.FILLCOLOR, Color.WHITE);
 		}
 	}
 

@@ -52,10 +52,10 @@ public class Gateway extends BPMNNode implements Decorated {
 		this.gatewayType = gatewayType;
 		getAttributeMap().put(AttributeMap.LABEL, label);
 		getAttributeMap().put(AttributeMap.SHOWLABEL, false);
-		getAttributeMap().put(AttributeMap.SHAPE, new Diamond());
+	//	getAttributeMap().put(AttributeMap.SHAPE, new Diamond());
 		getAttributeMap().put(AttributeMap.SQUAREBB, true);
 		getAttributeMap().put(AttributeMap.RESIZABLE, false);
-		getAttributeMap().put(AttributeMap.SIZE, new Dimension(25, 25));
+	//	getAttributeMap().put(AttributeMap.SIZE, new Dimension(25, 25));
 	}
 
 	public GatewayType getGatewayType() {

@@ -77,8 +77,8 @@ public class Activity extends BPMNNode implements Decorated {
 		this.bCollapsed = bCollapsed;
 		getAttributeMap().put(AttributeMap.LABEL, label);
 		getAttributeMap().put(AttributeMap.SHOWLABEL, false);
-		getAttributeMap().put(AttributeMap.SIZE, new Dimension(stdWidth, stdHeight));
-		getAttributeMap().put(AttributeMap.SHAPE, new Rectangle(true));
+	//	getAttributeMap().put(AttributeMap.SIZE, new Dimension(stdWidth, stdHeight));
+	//	getAttributeMap().put(AttributeMap.SHAPE, new Rectangle(true));
 		getAttributeMap().put(AttributeMap.SQUAREBB, false);
 		getAttributeMap().put(AttributeMap.RESIZABLE, false);
 	}

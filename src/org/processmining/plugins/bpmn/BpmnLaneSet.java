@@ -94,4 +94,9 @@ public class BpmnLaneSet extends BpmnIdName {
 		}
 		return allLanes;
 	}
+	
+	protected void checkValidity(Bpmn bpmn) {
+		//checkRequired(bpmn, "id", id);
+		//dont require id
+	}
 }

@@ -37,7 +37,7 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 			String label, boolean looped, boolean adhoc, boolean compensation, boolean multiinstance, boolean collapsed) {
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed);
 		children = new HashSet<ContainableDirectedGraphElement>();
-		fillAttributes();
+		//fillAttributes();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 			boolean collapsed, SubProcess parentSubProcess) {
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed, parentSubProcess);
 		children = new HashSet<ContainableDirectedGraphElement>();
-		fillAttributes();
+		//fillAttributes();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 			boolean collapsed, Swimlane parentSwimlane) {
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed, parentSwimlane);
 		children = new HashSet<ContainableDirectedGraphElement>();
-		fillAttributes();
+		//fillAttributes();
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed);
 		children = new HashSet<ContainableDirectedGraphElement>();
 		this.triggeredByEvent = triggeredByEvent;
-		fillAttributes();
+		//fillAttributes();
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed, parentSubProcess);
 		children = new HashSet<ContainableDirectedGraphElement>();
 		this.triggeredByEvent = triggeredByEvent;
-		fillAttributes();
+		//fillAttributes();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class SubProcess extends Activity implements Decorated,ContainingDirected
 		super(bpmndiagram, label, looped, adhoc, compensation, multiinstance, collapsed, parentSwimlane);
 		children = new HashSet<ContainableDirectedGraphElement>();
 		this.triggeredByEvent = triggeredByEvent;
-		fillAttributes();
+		//fillAttributes();
 	}
 
 	/**

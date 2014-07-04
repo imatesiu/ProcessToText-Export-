@@ -8,9 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.SwingConstants;
 
-import org.processmining.framework.providedobjects.SubstitutionType;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.AbstractDirectedGraph;
 import org.processmining.models.graphbased.directed.DirectedGraph;
@@ -37,7 +35,7 @@ import org.processmining.plugins.bpmn.BpmnAssociation.AssociationDirection;
 
 // objects of this type should be represented in the framework by the
 // BPMNDiagram interface.
-@SubstitutionType(substitutedType = BPMNDiagram.class)
+//@SubstitutionType(substitutedType = BPMNDiagram.class)
 public class BPMNDiagramImpl extends AbstractDirectedGraph<BPMNNode, BPMNEdge<? extends BPMNNode, ? extends BPMNNode>>
 		implements BPMNDiagram {
 
@@ -66,7 +64,7 @@ public class BPMNDiagramImpl extends AbstractDirectedGraph<BPMNNode, BPMNEdge<? 
 		dataAssociations = new LinkedHashSet<DataAssociation>();
 		associations = new LinkedHashSet<Association>();
 		swimlanes = new LinkedHashSet<Swimlane>();
-		getAttributeMap().put(AttributeMap.PREF_ORIENTATION, SwingConstants.WEST);
+	//	getAttributeMap().put(AttributeMap.PREF_ORIENTATION, SwingConstants.WEST);
 		getAttributeMap().put(AttributeMap.LABEL, label);
 	}
 

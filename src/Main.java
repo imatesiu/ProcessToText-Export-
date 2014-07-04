@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.bpmn.BPMNDiagram;
 import org.processmining.models.graphbased.directed.bpmn.BPMNDiagramFactory;
 import org.processmining.models.graphbased.directed.bpmn.BPMNNode;
@@ -76,15 +75,15 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		String file = "/Users/isiu/Downloads/ProcessToText (Export)/BicycleManufacturing.json";
-		String fileBP = "/Users/isiu/temp/test2.bpmn";//"/Users/isiu/github/prom_plugins/BPMNMeasures/tests/testfiles/Residency.bpmn";//"/Users/isiu/Dropbox/TPCS Share folder/TPCS/Modelli/BPMN/Export_TPCS_Complete_model.bpmn";
+		String fileBP = "/Users/isiu/temp/test2.bpmn";// "/Users/isiu/github/prom_plugins/BPMNMeasures/tests/testfiles/Residency.bpmn";//"/Users/isiu/Dropbox/TPCS Share folder/TPCS/Modelli/BPMN/Export_TPCS_Complete_model.bpmn";
 		// String file = "RigidTest.json";
-
+		file = "/Users/isiu/Downloads/ProcessToText (Export)/RigidTest.json";
 		// Set up label parsing classes
 		lHelper = new EnglishLabelHelper();
 		lDeriver = new EnglishLabelDeriver(lHelper);
 
 		// Load and generate from JSON files in directory
-		 //createFromFile(file);
+		// createFromFile(file);
 		createFromFileFromBPMN(fileBP);
 	}
 
@@ -124,7 +123,7 @@ public class Main {
 				model, false);
 
 		System.out.print(sentencePlan);
-		
+
 		// Discourse Marker
 		DiscourseMarker discourseMarker = new DiscourseMarker();
 		sentencePlan = discourseMarker.insertSequenceConnectives(sentencePlan);
@@ -198,16 +197,19 @@ public class Main {
 		}
 
 	}
-private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
-	String Out="";
-	for (DSynTSentence dSynTSentence : AD) {
-		 ExecutableFragment efrag = dSynTSentence.getExecutableFragment();
-		Out+= efrag.getAction()+" "+efrag.getAddition()+" "+efrag.getBo();
+
+	private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD) {
+		String Out = "";
+		for (DSynTSentence dSynTSentence : AD) {
+			ExecutableFragment efrag = dSynTSentence.getExecutableFragment();
+			Out += efrag.getAction() + " " + efrag.getAddition() + " "
+					+ efrag.getBo() + " ";
+			out.println("\n");
+		}
+		out.println("");
+		out.println(Out);
 	}
-	out.println("");
-	out.println(Out);
-}
-	
+
 	private static BPMNDiagram BpmnSelectDiagram(Bpmn bpmn) {
 		Collection<BpmnDiagram> cbpmn = bpmn.getDiagrams();
 		String namebpd = "";
@@ -221,7 +223,7 @@ private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
 				.getDiagram().toString());
 		Map<String, BPMNNode> id2node = new HashMap<String, BPMNNode>();
 		Map<String, Swimlane> id2lane = new HashMap<String, Swimlane>();
-		
+
 		if (parameters.getDiagram() == BpmnSelectDiagramParameters.NODIAGRAM) {
 			bpmn.unmarshall(newDiagram, id2node, id2lane);
 		} else {
@@ -333,15 +335,15 @@ private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
 			Activity activity;
 			if (task.getParentLane() == null && task.getParentPool() != null) {
 				activity = new Activity(task.getId().hashCode(), task
-						.getLabel().replaceAll("\n", " "), null, poolMap.get(task.getParentPool()
-								.hashCode()),
+						.getLabel().replaceAll("\n", " "), null,
+						poolMap.get(task.getParentPool().hashCode()),
 						taskType(task));
 
 			} else {
-				activity = new Activity(task.getId().hashCode(), task
-						.getLabel().replaceAll("\n", " "), laneMap.get(task
-						.getParentLane().hashCode()), poolMap.get(task
-						.getParentPool().hashCode()),
+				String label = task.getLabel().replaceAll("\n", " ");
+				activity = new Activity(task.getId().hashCode(), label,
+						laneMap.get(task.getParentLane().hashCode()),
+						poolMap.get(task.getParentPool().hashCode()),
 						taskType(task));
 			}
 			if (task.getParentSubProcess() != null) {
@@ -357,8 +359,8 @@ private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
 			Activity activity;
 			if (task.getParentLane() == null && task.getParentPool() != null) {
 				activity = new Activity(task.getId().hashCode(), task
-						.getLabel().replaceAll("\n", " "), null, poolMap.get(task.getParentPool()
-								.hashCode()), 2);
+						.getLabel().replaceAll("\n", " "), null,
+						poolMap.get(task.getParentPool().hashCode()), 2);
 
 			} else {
 				activity = new Activity(task.getId().hashCode(), task
@@ -376,18 +378,18 @@ private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
 		for (org.processmining.models.graphbased.directed.bpmn.elements.Event bevent : BPDiagram
 				.getEvents()) {
 			Event event;
-			if (bevent.getParentLane() == null && bevent.getParentPool() != null) {
-				 event = new Event(bevent.getId().hashCode(),
-						bevent.getLabel(), null, poolMap.get(bevent.getParentPool()
-								.hashCode()), getEventType(bevent));
-				
-			}else{
-				
-			
-			 event = new Event(bevent.getId().hashCode(),
-					bevent.getLabel(), laneMap.get(bevent.getParentLane()
-							.hashCode()), poolMap.get(bevent.getParentPool()
-							.hashCode()), getEventType(bevent));
+			if (bevent.getParentLane() == null
+					&& bevent.getParentPool() != null) {
+				event = new Event(bevent.getId().hashCode(), bevent.getLabel(),
+						null, poolMap.get(bevent.getParentPool().hashCode()),
+						getEventType(bevent));
+
+			} else {
+
+				event = new Event(bevent.getId().hashCode(), bevent.getLabel(),
+						laneMap.get(bevent.getParentLane().hashCode()),
+						poolMap.get(bevent.getParentPool().hashCode()),
+						getEventType(bevent));
 			}
 			if (bevent.getParentSubProcess() != null) {
 				event.setSubProcessID(bevent.getParentSubProcess().hashCode());
@@ -401,17 +403,15 @@ private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
 				.getGateways()) {
 			Gateway gateway;
 			if (gate.getParentLane() == null && gate.getParentPool() != null) {
-				 gateway = new Gateway(gate.getId().hashCode(),
-						gate.getLabel(), null, poolMap.get(gate.getParentPool()
-								.hashCode()),
+				gateway = new Gateway(gate.getId().hashCode(), gate.getLabel(),
+						null, poolMap.get(gate.getParentPool().hashCode()),
 						typegateway(gate));
-			}else{
-				
-			 gateway = new Gateway(gate.getId().hashCode(),
-					gate.getLabel(), laneMap.get(gate.getParentLane()
-							.hashCode()), poolMap.get(gate.getParentPool()
-							.hashCode()),
-					typegateway(gate));
+			} else {
+
+				gateway = new Gateway(gate.getId().hashCode(), gate.getLabel(),
+						laneMap.get(gate.getParentLane().hashCode()),
+						poolMap.get(gate.getParentPool().hashCode()),
+						typegateway(gate));
 			}
 			if (gate.getParentSubProcess() != null) {
 				gateway.setSubProcessID(gate.getParentSubProcess().hashCode());
@@ -525,7 +525,48 @@ private static void PrintArrayListDSynTSentence(ArrayList<DSynTSentence> AD){
 		 * "SequenceFlow")); } if (!hasOutput) { model.addArc(new Arc(getId(),
 		 * "", subE, out, "SequenceFlow")); } } } } }
 		 */
-		 model.print();
+		// Connect inner of subproess to process model
+		for (Activity a : model.getActivites().values()) {
+			if (a.getType() == ActivityType.SUBPROCESS) {
+				int subProcesID = a.getId();
+				Element out = null;
+				int removeout = -1;
+
+				// Remove arcs from subprocess activity
+				for (Arc arc : model.getArcs().values()) {
+					if (arc.getSource() == a) {
+						out = arc.getTarget();
+						removeout = arc.getId();
+					}
+				}
+				model.removeArc(removeout);
+
+				// Check all activities belonging to subprocess
+				for (Event subE : model.getEvents().values()) {
+					if (subE.getSubProcessID() == subProcesID) {
+						boolean hasInput = false;
+						boolean hasOutput = false;
+						for (Arc arc : model.getArcs().values()) {
+							if (arc.getSource() == subE) {
+								hasOutput = true;
+							}
+							if (arc.getTarget() == subE) {
+								hasInput = true;
+							}
+						}
+						if (!hasInput) {
+							model.addArc(new Arc(java.util.UUID.randomUUID()
+									.hashCode(), "", a, subE, "SequenceFlow"));
+						}
+						if (!hasOutput) {
+							model.addArc(new Arc(java.util.UUID.randomUUID()
+									.hashCode(), "", subE, out, "SequenceFlow"));
+						}
+					}
+				}
+			}
+		}
+		model.print();
 		return model;
 	}
 
