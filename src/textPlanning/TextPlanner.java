@@ -389,7 +389,10 @@ public class TextPlanner {
 						// Event is followed by gateway --> full sentence
 						if (event.getType() == EventType.START_EVENT && currentPosition < orderedTopNodes.size()-1 && PlanningHelper.isBond(orderedTopNodes.get(currentPosition+1))) {
 							start = false;
+							
 							ExecutableFragment eFrag = new ExecutableFragment("start", "process", "", "with a decision");
+							String role = getRole(event,eFrag);
+							eFrag.setRole(role);
 							eFrag.add_hasArticle = false;
 							eFrag.bo_isSubject = true;
 							sentencePlan.add(new DSynTMainSentence(eFrag));
@@ -863,6 +866,34 @@ public class TextPlanner {
 	 * Returns role of a fragment.  
 	 */
 	private String getRole(Activity a, AbstractFragment frag) {
+		if (a.getLane() == null) {
+			frag.verb_IsPassive = true;
+			frag.bo_isSubject = true;
+			if (frag.getBo().equals("")) {
+				frag.setBo("it");
+				frag.bo_hasArticle = false;
+			}
+			return "";
+		}
+		String role = a.getLane().getName();
+		if (role.equals("")) {
+			role = a.getPool().getName();
+		}
+		if (role.equals("")) {
+			frag.verb_IsPassive = true;
+			frag.bo_isSubject = true;
+			if (frag.getBo().equals("")) {
+				frag.setBo("it");
+				frag.bo_hasArticle = false;
+			}
+		}
+		return role;
+	}
+	
+	/**
+	 * Returns role of a fragment.  
+	 */
+	private String getRole(Event a, AbstractFragment frag) {
 		if (a.getLane() == null) {
 			frag.verb_IsPassive = true;
 			frag.bo_isSubject = true;

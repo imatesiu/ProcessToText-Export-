@@ -105,8 +105,8 @@ public class TextToIntermediateConverter {
 								String action = anno.getActions().get(0);
 								String bo = anno.getBusinessObjects().get(0);
 								//
-								role = a.getLane().getName();
-								// role = getRole(tNode);
+								//role = a.getLane().getName();
+								 role = getRole(tNode);
 
 								String addition = anno.getAddition();
 								eFragYes = new ExecutableFragment(action, bo,
@@ -121,8 +121,8 @@ public class TextToIntermediateConverter {
 								String action = anno.getActions().get(0);
 								String bo = anno.getBusinessObjects().get(0);
 
-								role = a.getLane().getName();
-								// role = getRole(tNode);
+							//	role = a.getLane().getName();
+								 role = getRole(tNode);
 
 								String addition = anno.getAddition();
 								eFragNo = new ExecutableFragment(action, bo,
@@ -145,7 +145,7 @@ public class TextToIntermediateConverter {
 		}
 
 		ConditionFragment cFrag = new ConditionFragment(gwExtractor.getVerb(),
-				gwExtractor.getObject(), "", "", ConditionFragment.TYPE_IF,
+				gwExtractor.getObject(), role, "", ConditionFragment.TYPE_IF,
 				gwExtractor.getModList());
 		cFrag.bo_replaceWithPronoun = true;
 		cFrag.addAssociation(Integer.valueOf(node.getEntry().getId()));
@@ -160,6 +160,7 @@ public class TextToIntermediateConverter {
 		DSynTConditionSentence dsyntSentence1 = new DSynTConditionSentence(
 				eFragYes, cFrag);
 		DSynTMainSentence dsyntSentence2 = new DSynTMainSentence(eFragNo);
+		
 		ArrayList<DSynTSentence> sentences = new ArrayList<DSynTSentence>();
 		sentences.add(dsyntSentence1);
 		sentences.add(dsyntSentence2);
@@ -724,9 +725,9 @@ public class TextToIntermediateConverter {
 		// END EVENT
 		case EventType.END_EVENT:
 			if (event.getSubProcessID() > 0) {
-				eFrag = new ExecutableFragment("finish", "subprocess", "", "");
+				eFrag = new ExecutableFragment("finish", "subprocess", role, "");
 			} else {
-				eFrag = new ExecutableFragment("finish", "process", "", "");
+				eFrag = new ExecutableFragment("finish", "process", role, "");
 			}
 			eFrag.verb_IsPassive = true;
 			eFrag.bo_isSubject = true;
@@ -1009,11 +1010,11 @@ public class TextToIntermediateConverter {
 	 */
 	private String getRole(RPSTNode<ControlFlow, Node> node) {
 		String role = process.getGateways()
-				.get(Integer.valueOf(node.getExit().getId())).getLane()
+				.get(Integer.valueOf(node.getEntry().getId())).getLane()
 				.getName();
 		if (role.equals("")) {
 			role = process.getGateways()
-					.get(Integer.valueOf(node.getExit().getId())).getPool()
+					.get(Integer.valueOf(node.getEntry().getId())).getPool()
 					.getName();
 		}
 		return role;
