@@ -73,12 +73,10 @@ public class GatewayPropertyRecord {
 			Arc first = null;
 			Arc second = null;
 			for (Arc arc: process.getArcs().values()) {
-				if (arc.getSource().getId() == Integer.valueOf(node.getEntry().getId())) {
 				if (first == null) {
 					first = arc;
 				} else {
 					second = arc;
-				}
 				}
 			}
 			if ((first.getLabel().toLowerCase().equals("yes") && second.getLabel().toLowerCase().equals("no")) ||

@@ -93,7 +93,7 @@ public class TextToIntermediateConverter {
 			for (RPSTNode<ControlFlow, Node> tNode : rpst.getChildren(pNode)) {
 				if (tNode.getEntry() == node.getEntry()) {
 					for (Arc arc : process.getArcs().values()) {
-						//System.out.println(arc.getLabel());
+						System.out.println(arc.getLabel());
 						if (arc.getSource().getId() == Integer.valueOf(tNode
 								.getEntry().getId())
 								&& arc.getTarget().getId() == Integer
@@ -122,7 +122,7 @@ public class TextToIntermediateConverter {
 								String bo = anno.getBusinessObjects().get(0);
 
 								role = a.getLane().getName();
-							//	 role = getRole(tNode);
+								// role = getRole(tNode);
 
 								String addition = anno.getAddition();
 								eFragNo = new ExecutableFragment(action, bo,
@@ -147,10 +147,7 @@ public class TextToIntermediateConverter {
 		ConditionFragment cFrag = new ConditionFragment(gwExtractor.getVerb(),
 				gwExtractor.getObject(), "", "", ConditionFragment.TYPE_IF,
 				gwExtractor.getModList());
-		cFrag.bo_replaceWithPronoun =  false;
-		cFrag.verb_IsPassive = true;
-		cFrag.bo_isSubject = true;
-		
+		cFrag.bo_replaceWithPronoun = true;
 		cFrag.addAssociation(Integer.valueOf(node.getEntry().getId()));
 
 		// If imperative mode
@@ -163,7 +160,6 @@ public class TextToIntermediateConverter {
 		DSynTConditionSentence dsyntSentence1 = new DSynTConditionSentence(
 				eFragYes, cFrag);
 		DSynTMainSentence dsyntSentence2 = new DSynTMainSentence(eFragNo);
-		
 		ArrayList<DSynTSentence> sentences = new ArrayList<DSynTSentence>();
 		sentences.add(dsyntSentence1);
 		sentences.add(dsyntSentence2);
@@ -650,10 +646,7 @@ public class TextToIntermediateConverter {
 		ExecutableFragment eFrag = null;
 		ArrayList<DSynTSentence> preSentences;
 
-		String role ="";
-		if(event.getLane()!=null){
-		role= event.getLane().getName();
-		}
+		String role = event.getLane().getName();
 		if (role.equals("")) {
 			role = event.getPool().getName();
 		}
@@ -728,9 +721,9 @@ public class TextToIntermediateConverter {
 		// END EVENT
 		case EventType.END_EVENT:
 			if (event.getSubProcessID() > 0) {
-				eFrag = new ExecutableFragment("finish", "subprocess", role, "");
+				eFrag = new ExecutableFragment("finish", "subprocess", "", "");
 			} else {
-				eFrag = new ExecutableFragment("finish", "process", role, "");
+				eFrag = new ExecutableFragment("finish", "process", "", "");
 			}
 			eFrag.verb_IsPassive = true;
 			eFrag.bo_isSubject = true;
@@ -1013,11 +1006,11 @@ public class TextToIntermediateConverter {
 	 */
 	private String getRole(RPSTNode<ControlFlow, Node> node) {
 		String role = process.getGateways()
-				.get(Integer.valueOf(node.getEntry().getId())).getLane()
+				.get(Integer.valueOf(node.getExit().getId())).getLane()
 				.getName();
 		if (role.equals("")) {
 			role = process.getGateways()
-					.get(Integer.valueOf(node.getEntry().getId())).getPool()
+					.get(Integer.valueOf(node.getExit().getId())).getPool()
 					.getName();
 		}
 		return role;
