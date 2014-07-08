@@ -5,6 +5,7 @@ import java.util.HashMap;
 import textPlanning.recordClasses.ModifierRecord;
 import contentDetermination.labelAnalysis.EnglishLabelHelper;
 import de.hpi.bpt.process.Node;
+import edu.stanford.nlp.io.EncodingPrintWriter.out;
 
 public class GatewayExtractor {
 	
@@ -111,7 +112,17 @@ public class GatewayExtractor {
 					n = n + " " + sSplit[i];
 				}
 				n = n.trim();
+				if (lHelper.isNoun(sSplit[1])){
+					
+					bo = sSplit[1];
+				}else{
 				bo = n.substring(0, n.length()-1);
+				}
+				
+				ModifierRecord mr = new ModifierRecord(ModifierRecord.TYPE_ADJ, ModifierRecord.TARGET_BO);
+				//mr.addAttribute("rheme", "+");
+				if (lHelper.isAdjective(sSplit[0]))
+					modList.put(sSplit[0],mr);
 				String lastNoun = sSplit[sSplit.length-2].trim();
 				if (lastNoun.endsWith("s") && lHelper.isNoun(lastNoun.substring(0, lastNoun.length()-1))) {
 					bo_isPlural = true;

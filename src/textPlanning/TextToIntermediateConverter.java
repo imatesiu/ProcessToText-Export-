@@ -105,8 +105,8 @@ public class TextToIntermediateConverter {
 								String action = anno.getActions().get(0);
 								String bo = anno.getBusinessObjects().get(0);
 								//
-								//role = a.getLane().getName();
-								 role = getRole(tNode);
+								role = a.getLane().getName();
+								// role = getRole(tNode);
 
 								String addition = anno.getAddition();
 								eFragYes = new ExecutableFragment(action, bo,
@@ -121,8 +121,8 @@ public class TextToIntermediateConverter {
 								String action = anno.getActions().get(0);
 								String bo = anno.getBusinessObjects().get(0);
 
-							//	role = a.getLane().getName();
-								 role = getRole(tNode);
+								role = a.getLane().getName();
+							//	 role = getRole(tNode);
 
 								String addition = anno.getAddition();
 								eFragNo = new ExecutableFragment(action, bo,
@@ -145,9 +145,12 @@ public class TextToIntermediateConverter {
 		}
 
 		ConditionFragment cFrag = new ConditionFragment(gwExtractor.getVerb(),
-				gwExtractor.getObject(), role, "", ConditionFragment.TYPE_IF,
+				gwExtractor.getObject(), "", "", ConditionFragment.TYPE_IF,
 				gwExtractor.getModList());
-		cFrag.bo_replaceWithPronoun = true;
+		cFrag.bo_replaceWithPronoun =  false;
+		cFrag.verb_IsPassive = true;
+		cFrag.bo_isSubject = true;
+		
 		cFrag.addAssociation(Integer.valueOf(node.getEntry().getId()));
 
 		// If imperative mode
