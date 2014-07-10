@@ -77,7 +77,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		String file = "/Users/isiu/Downloads/ProcessToText (Export)/BicycleManufacturing.json";
-		String fileBP = "/Users/isiu/temp/test2.bpmn";// "/Users/isiu/github/prom_plugins/BPMNMeasures/tests/testfiles/Residency.bpmn";//"/Users/isiu/Dropbox/TPCS Share folder/TPCS/Modelli/BPMN/Export_TPCS_Complete_model.bpmn";
+		String fileBP = "/Users/isiu/temp/test8.bpmn";// "/Users/isiu/github/prom_plugins/BPMNMeasures/tests/testfiles/Residency.bpmn";//"/Users/isiu/Dropbox/TPCS Share folder/TPCS/Modelli/BPMN/Export_TPCS_Complete_model.bpmn";
 		// String file = "RigidTest.json";
 		file = "/Users/isiu/Downloads/ProcessToText (Export)/RigidTest.json";
 		// Set up label parsing classes

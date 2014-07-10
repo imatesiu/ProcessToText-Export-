@@ -200,12 +200,12 @@ public class TextPlanner {
 						sentencePlan.add(postStatement);
 					}
 				}
-					
+				if(convRecord!=null){
 				// Pass post fragment
 				if (convRecord.post != null) {
 					passedFragments.add(convRecord.post);
 				}
-			
+				}
 			//**************************************  RIGIDS *******************************************
 			} else if (PlanningHelper.isRigid(node)){
 				

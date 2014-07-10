@@ -147,7 +147,8 @@ public class TextToIntermediateConverter {
 		ConditionFragment cFrag = new ConditionFragment(gwExtractor.getVerb(),
 				gwExtractor.getObject(), "", "", ConditionFragment.TYPE_IF,
 				gwExtractor.getModList());
-		cFrag.bo_replaceWithPronoun = true;
+		cFrag.bo_replaceWithPronoun = true;//false;
+		cFrag.bo_isSubject = true;
 		cFrag.addAssociation(Integer.valueOf(node.getEntry().getId()));
 
 		// If imperative mode

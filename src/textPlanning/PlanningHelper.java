@@ -16,6 +16,7 @@ import org.jbpt.petri.unfolding.OccurrenceNet;
 import org.jbpt.pm.FlowNode;
 import org.jbpt.pm.structure.ProcessModel2NetSystem;
 import org.jbpt.throwable.TransformationException;
+import org.jbpt.utils.IOUtils;
 
 import dataModel.p2t.WFnet2Processes;
 import dataModel.petri.ProcessCover;
@@ -431,7 +432,9 @@ public class PlanningHelper {
 			int tID = Integer.valueOf(arc.getTarget().getId());
 			pm.addControlFlow(elements.get(sID), elements.get(tID));
 		}
-
+		
+		IOUtils.toFile("/Users/isiu/temp/netRididBP.dot", pm.toDOT());
+		 
 		NetSystem netSystem = null;
 		try {
 			netSystem = ProcessModel2NetSystem.transform(pm);
@@ -439,8 +442,9 @@ public class PlanningHelper {
 			e1.printStackTrace();
 		}
 		netSystem.loadNaturalMarking();
+		IOUtils.toFile("/Users/isiu/temp/netRididPN.dot", netSystem.toDOT());
 		ProcessCover fps = new ProcessCover(netSystem);
-
+		
 		int c = 0;
 
 		for (dataModel.petri.Process p : fps.getCorrectProcesses()) {
@@ -452,7 +456,8 @@ public class PlanningHelper {
 				ns.addFlow(flow.getSource(), flow.getTarget());
 			}
 			ns.loadNaturalMarking();
-
+			
+			  
 			// Save run (NetSystem) as png
 			// dotSource = serializer.serialize(ns);
 			// try {

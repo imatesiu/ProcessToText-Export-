@@ -107,7 +107,7 @@ public class IntermediateToDSynTConverter {
 			object.setAttribute("class", "common_noun");
 			object.setAttribute("rel", "I");
 			object.setAttribute("article", "def");
-			object.setAttribute("lexeme", "dummy");
+			object.setAttribute("lexeme", frag.getBo());
 			object.setAttribute("pro", "pro");
 			object.setAttribute("gender", "neut");
 		}
