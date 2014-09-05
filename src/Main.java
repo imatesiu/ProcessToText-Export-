@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.bpmn.BPMNDiagram;
 import org.processmining.models.graphbased.directed.bpmn.BPMNDiagramFactory;
 import org.processmining.models.graphbased.directed.bpmn.BPMNNode;
@@ -77,8 +78,11 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		String file = "/Users/isiu/Downloads/ProcessToText (Export)/BicycleManufacturing.json";
-		String fileBP = "/Users/isiu/temp/test8.bpmn";// "/Users/isiu/github/prom_plugins/BPMNMeasures/tests/testfiles/Residency.bpmn";//"/Users/isiu/Dropbox/TPCS Share folder/TPCS/Modelli/BPMN/Export_TPCS_Complete_model.bpmn";
+		//String fileBP = "/Users/isiu/temp/test4.bpmn";// "/Users/isiu/github/prom_plugins/BPMNMeasures/tests/testfiles/Residency.bpmn";//"/Users/isiu/Dropbox/TPCS Share folder/TPCS/Modelli/BPMN/Export_TPCS_Complete_model.bpmn";
 		// String file = "RigidTest.json";
+	    //String fileBP = "/Users/isiu/Dropbox/LearnPad_Share_Folder/export ADL/beneficiary.bpmn";
+		//String fileBP = "/Users/isiu/Dropbox/LearnPad_Share_Folder/export ADL/coordinator.bpmn";
+		String fileBP = "/Users/isiu/Dropbox/LearnPad_Share_Folder/export ADL/po.bpmn";
 		file = "/Users/isiu/Downloads/ProcessToText (Export)/RigidTest.json";
 		// Set up label parsing classes
 		lHelper = new EnglishLabelHelper();
@@ -416,6 +420,9 @@ public class Main {
 		for (org.processmining.models.graphbased.directed.bpmn.elements.Gateway gate : BPDiagram
 				.getGateways()) {
 			Gateway gateway;
+			if(gate.getLabel()==null){
+				gate.getAttributeMap().put(AttributeMap.LABEL, "");
+			}
 			if (gate.getParentLane() == null && gate.getParentPool() != null) {
 				gateway = new Gateway(gate.getId().hashCode(), gate.getLabel(),
 						null, poolMap.get(gate.getParentPool().hashCode()),
